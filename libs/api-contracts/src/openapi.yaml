@@ -57,6 +57,60 @@ paths:
                 items:
                   $ref: '#/components/schemas/Entrega'
 
+  /api/alertas-manutencao:
+    get:
+      summary: Listar alertas de manutenção preventiva
+      tags:
+        - Manutenção
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [PENDENTE, ENVIADO, FALHA]
+      responses:
+        '200':
+          description: Alertas, do mais recente ao mais antigo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertaManutencao'
+        '400':
+          description: Status inválido
+
+  /api/alertas-manutencao/verificacao:
+    post:
+      summary: Verifica os veículos ativos e gera alertas para os elegíveis
+      tags:
+        - Manutenção
+      responses:
+        '200':
+          description: Alertas gerados nesta execução
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertaManutencao'
+
+  /api/alertas-manutencao/reprocessamento:
+    post:
+      summary: Reenvia os alertas pendentes
+      tags:
+        - Manutenção
+      responses:
+        '200':
+          description: Alertas reprocessados, com o status atualizado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertaManutencao'
+
   # TODO: Endpoints que não existem mais
   /api/rastreamento/real-time:
     get:
@@ -93,6 +147,36 @@ components:
           enum: [ativo, inativo, manutencao]
         quilometragem:
           type: number
+
+    AlertaManutencao:
+      type: object
+      properties:
+        id:
+          type: integer
+        veiculoId:
+          type: integer
+        placa:
+          type: string
+        motivo:
+          type: string
+          enum: [QUILOMETRAGEM, TEMPO, QUILOMETRAGEM_E_TEMPO]
+        mensagem:
+          type: string
+        status:
+          type: string
+          enum: [PENDENTE, ENVIADO, FALHA]
+        detalheErro:
+          type: string
+          nullable: true
+        tentativas:
+          type: integer
+        dataCriacao:
+          type: string
+          format: date-time
+        dataEnvio:
+          type: string
+          format: date-time
+          nullable: true
 
     VeiculoInput:
       type: object

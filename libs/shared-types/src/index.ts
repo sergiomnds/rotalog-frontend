@@ -64,5 +64,23 @@ export interface Notificacao {
   enviado_em?: Date;
 }
 
+export type StatusAlertaManutencao = 'PENDENTE' | 'ENVIADO' | 'FALHA';
+
+export type MotivoAlertaManutencao = 'QUILOMETRAGEM' | 'TEMPO' | 'QUILOMETRAGEM_E_TEMPO';
+
+// Alerta de manutenção preventiva - mesmas propriedades do AlertaManutencaoResponse da api-frotas
+export interface AlertaManutencao {
+  id: number;
+  veiculoId: number;
+  placa: string;
+  motivo: MotivoAlertaManutencao;
+  mensagem: string;
+  status: StatusAlertaManutencao;
+  detalheErro: string | null;
+  tentativas: number;
+  dataCriacao: string;
+  dataEnvio: string | null;
+}
+
 // TODO: Falta interface de Manutencao
 // TODO: Falta interface de Rastreamento em tempo real

@@ -45,6 +45,24 @@ export interface Manutencao {
   km_na_manutencao: number;
 }
 
+export type StatusAlerta = 'PENDENTE' | 'ENVIADO' | 'FALHA';
+
+export type MotivoAlerta = 'QUILOMETRAGEM' | 'TEMPO' | 'QUILOMETRAGEM_E_TEMPO';
+
+// Mesmas propriedades do AlertaManutencaoResponse da api-frotas (camelCase)
+export interface AlertaManutencao {
+  id: number;
+  veiculoId: number;
+  placa: string;
+  motivo: MotivoAlerta;
+  mensagem: string;
+  status: StatusAlerta;
+  detalheErro: string | null;
+  tentativas: number;
+  dataCriacao: string;
+  dataEnvio: string | null;
+}
+
 export interface Entrega {
   id: number;
   codigo_rastreio: string;
